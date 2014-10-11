@@ -1,0 +1,135 @@
+.v{
+  margin: 10px;
+  margin-right:0px;
+  border: 5px solid #00FF00;
+  width:100px;
+  height:100px;
+  float:left;
+}
+
+#layout1{
+  width: 1090px;
+  border:1px solid #000000;
+  height: 128px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+#layout2{
+  width: 700px;
+  height: 330px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+
+.matr{
+  width:100px;
+  height:100px;
+  background-color:#DDEEDD;
+}
+
+#explicatii{
+  padding:10px;
+  position:relative;
+  left:50px;
+  width:304px;
+  height:304px;
+  background-attachment:scroll;
+  overflow:auto;
+  background-color:#FFFBC6;
+  font: normal normal normal 18px/normal Comic sans MS, arial, verdana, sans-serif;
+  white-space: pre;
+}
+
+#matr11{
+	background-image: url('poze/loc6.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr12{
+	background-image: url('poze/loc2.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr13{
+	background-image: url('poze/loc7.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr21{
+	background-image: url('poze/loc3.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr22{
+	background-image: url('poze/loc1.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr23{
+	background-image: url('poze/loc4.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr31{
+	background-image: url('poze/loc8.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr32{
+	background-image: url('poze/loc5.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#matr33{
+	background-image: url('poze/loc9.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+
+#loc0{
+  	background-image: url('poze/loc1.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc1{
+  	background-image: url('poze/loc2.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc2{
+  	background-image: url('poze/loc3.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc3{
+  	background-image: url('poze/loc4.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc4{
+  	background-image: url('poze/loc5.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc5{
+  	background-image: url('poze/loc6.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc6{
+  	background-image: url('poze/loc7.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc7{
+  	background-image: url('poze/loc8.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}
+#loc8{
+  	background-image: url('poze/loc9.jpg');
+	background-repeat: no-repeat;
+   	background-position:  center;  
+}

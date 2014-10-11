@@ -1,0 +1,422 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Jocul Pegged</title>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>  
+<script type="text/javascript" language="javascript">
+ var matr=new Array(new Array(),new Array(),new Array(),new Array(),new Array(),new Array(),new Array());
+ var stiva=new Array();
+ var piesa=new Array(); 
+var interval;
+var c=0;
+
+
+function pot_sa_mut(indice,directia){
+    var i,j;
+    //trebuie sa vad unde este piesa indice
+    var ok=1;
+    for(i=0;(i<7)&&(ok==1);i++)
+    for(j=0;(j<7)&&(ok==1);j++)
+       if(matr[i][j]==indice)ok=0;
+    i--;j--;
+    //cout<<"piesa "<<indice<<" e pe locul "<<i<<" "<<j<<endl;
+    switch(directia){
+      case 1:{
+	//daca iese din tabla
+	if(i<2)return 0;
+	//daca nu ai peste ce sa sari sau locul unde vrei sa sari e ocupat
+	if((matr[i-1][j]==0)||(matr[i-2][j]!=0))return 0;
+	break;
+      }
+      case 2:{
+	//daca iese din tabla
+	if(j<2)return 0;
+	//daca nu ai peste ce sa sari
+	if((matr[i][j-1]==0)||(matr[i][j-2]!=0))return 0;
+	break;
+      }
+      case 3:{
+	//daca iese din tabla
+	if(i>4)return 0;
+	//daca nu ai peste ce sa sari
+	if((matr[i+1][j]==0)||(matr[i+2][j]!=0))return 0;
+	break;
+      }
+      case 4:{
+	//daca iese din tabla
+	if(j>4)return 0;
+	//daca nu ai peste ce sa sari
+	if((matr[i][j+1]==0)||(matr[i][j+2]!=0))return 0;
+	break;
+      }
+    }
+      //document.getElementById("test").innerHTML+="merge sa mut piesa "+indice+" in directia "+directia+"<br>";
+    return 1;
+}
+
+function muta(indice, directie){
+    //trebuie sa vad unde este piesa indice
+    var ok=1,i,j;
+    for(i=0;(i<7)&&(ok==1);i++)
+    for(j=0;(j<7)&&(ok==1);j++)
+       if(matr[i][j]==indice)ok=0;
+    i--;j--;
+    switch(directie){
+       case 1:{
+	       matr[i-1][j]=0;//sterg piesa peste care sar
+	       //piesa[]
+	       matr[i-2][j]=matr[i][j];//mut piesa
+	       matr[i][j]=0;//sterg unde era piesa mutata
+	       break;
+	      }
+       case 2:{
+	       matr[i][j-1]=0;
+	       matr[i][j-2]=matr[i][j];
+	       matr[i][j]=0;
+	       break;
+	       }
+       case 3:{
+	       matr[i+1][j]=0;
+	       matr[i+2][j]=matr[i][j];
+	       matr[i][j]=0;
+	       break;
+	       }
+       case 4:{
+	       matr[i][j+1]=0;
+	       matr[i][j+2]=matr[i][j];
+	       matr[i][j]=0;
+	       break;
+	       }
+    }
+
+}
+
+function muta_gr(indice,dir,val){
+    //trebuie sa vad unde este piesa indice
+    var ok=1,i,j;
+    for(i=0;(i<7)&&(ok==1);i++)
+    for(j=0;(j<7)&&(ok==1);j++)
+       if(matr[i][j]==indice)ok=0;
+    i--;j--;
+    if(val!=0)val="<img src=\"piesa"+val+".gif\">";
+       else val="";
+    switch(dir){
+       case 1:{
+	       document.getElementById("patrat"+(i-1)+j).innerHTML=val;//sterg piesa peste care sar
+	       //document.getElementById("test").innerHTML+="sterg patratul cu ID patrat"+(i-1)+j+"<br>";
+		   document.getElementById("patrat"+(i-2)+j).innerHTML="<img src=\"piesa"+indice+".gif\">";//document.getElementById("patrat"+i+j).innerHTML;//mut piesa
+	       break;
+	      }
+       case 2:{
+           document.getElementById("patrat"+i+(j-1)).innerHTML=val;//sterg piesa peste care sar
+	       //document.getElementById("test").innerHTML+="sterg patratul cu ID patrat"+i+(j-1)+"<br>";
+		   document.getElementById("patrat"+i+(j-2)).innerHTML="<img src=\"piesa"+indice+".gif\">";//document.getElementById("patrat"+i+j).innerHTML;//mut piesa
+	       break;
+	       }
+       case 3:{
+	       document.getElementById("patrat"+(i+1)+j).innerHTML=val;//sterg piesa peste care sar
+  	       //document.getElementById("test").innerHTML+="sterg patratul cu ID patrat"+(i+1)+j+"<br>";
+		   document.getElementById("patrat"+(i+2)+j).innerHTML="<img src=\"piesa"+indice+".gif\">";//document.getElementById("patrat"+i+j).innerHTML;//mut piesa
+	       break;
+	       }
+       case 4:{
+   	       document.getElementById("patrat"+i+(j+1)).innerHTML=val;//sterg piesa peste care sar
+   	       //document.getElementById("test").innerHTML+="sterg patratul cu ID patrat"+i+(j+1)+"<br>";
+		   document.getElementById("patrat"+i+(j+2)).innerHTML="<img src=\"piesa"+indice+".gif\">";//document.getElementById("patrat"+i+j).innerHTML;//mut piesa
+	       break;
+	       }
+    }
+   document.getElementById("patrat"+i+j).innerHTML="";
+}
+
+function inroseste(vechi,nou){
+   document.getElementById("loc"+nou).style.borderColor="#FF0000";  
+   document.getElementById("loc"+nou).style.backgroundColor="#EEDDDD";
+   if(vechi!=-1){
+      document.getElementById("loc"+vechi).style.borderColor="#000000";  
+      document.getElementById("loc"+vechi).style.backgroundColor="#D4E7B2";
+   }
+}
+
+var loc=0,test=0;
+function interv(){
+    bktr();
+    if(test==1)clearInterval(interval);
+}
+
+var vechi=-1,nou;
+
+function bktr(){
+   var i,j,ii,jj,x,ok,n=6;
+  
+   while(loc>-1){
+      nou=loc;
+      inroseste(vechi,nou);
+      vechi=nou;
+      document.getElementById("test").innerHTML+="<b>sunt pe locul "+loc+" in stiva</b><br>";
+     
+      if(loc==n-1){
+       //trebuie reinitializata matricea
+       matr[1][3]=1;
+       matr[2][2]=2;
+       matr[2][3]=3;
+       matr[2][4]=4;
+       matr[3][3]=5;
+       matr[4][3]=6;
+       test=1;
+     for(i=0;i<n-1;i++)
+	    document.getElementById("test").innerHTML+="mut piesa "+stiva[i].piesa+" in directia "+stiva[i].directia+"<br>";
+	  return 1;
+	  }
+      ok=1;
+      for(i=stiva[loc].piesa-1;(i<n)&&(ok==1);i++){
+	 if(piesa[i].starea==1){
+	  //acum ca stiu ca piesa mai e pe tabla...
+	  //incerc sa vad in ce directie pot sa o duc
+	    document.getElementById("test").innerHTML+="  testez piesa "+(i+1)+"<br>";
+	  for(j=stiva[loc].directia+1;(j<5)&&(ok==1);j++){
+	    if(pot_sa_mut(i+1,j)==1){
+	      document.getElementById("test").innerHTML+="    mut piesa "+(i+1)+" in directia "+j+"<br>";
+	      stiva[loc].piesa=i+1;
+	      stiva[loc].directia=j;
+	      //trebuie sa vad unde este piesa i+1
+	      var ok2=1;
+	      for(ii=0;(ii<7)&&(ok2==1);ii++)
+	      for(jj=0;(jj<7)&&(ok2==1);jj++)
+		 if(matr[ii][jj]==i+1)ok2=0;
+
+	      ii--;jj--;
+
+	      switch (j){
+		    case 1:{
+		      ii--;
+		      break;
+		    }
+		    case 2:{
+		      jj--;
+		      break;
+	    	}
+		    case 3:{
+		      ii++;
+		      break;
+		    }
+		    case 4:{
+		      jj++;
+		      break;
+		    }
+	      }
+	      document.getElementById("test").innerHTML+="dispare piesa "+matr[ii][jj]+"<br>";
+	      stiva[loc].dispare=matr[ii][jj];     
+	      muta_gr(i+1,j,0);
+	      muta(i+1,j);
+
+   	      document.getElementById("piesa"+loc).innerHTML="<img src='piesa"+stiva[loc].piesa+".gif'>";
+	      document.getElementById("directia"+loc).innerHTML=stiva[loc].directia+"<img src='sageata"+stiva[loc].directia+".gif'>";
+	      document.getElementById("disparuta"+loc).innerHTML="<img src='piesa"+stiva[loc].dispare+".gif'>";
+	      
+          loc++;
+	      ok=0;
+	    }
+	  }
+
+	}
+	stiva[loc].directia=0;
+      }
+      if(ok==1){
+      document.getElementById("test").innerHTML+="<font color=\"#FF0000\">fac pas inapoi</font><br>";
+	stiva[loc].directia=0;
+	stiva[loc].piesa=1;
+    document.getElementById("piesa"+loc).innerHTML="";
+    document.getElementById("directia"+loc).innerHTML="";
+    document.getElementById("disparuta"+loc).innerHTML="";
+	
+	loc--;
+	x=stiva[loc].directia;
+	if(stiva[loc].directia<=2)x+=2;
+	else x-=2;
+
+	//aflu locul pe care era piesa disparuta
+	 // document.getElementById("test").innerHTML+="pun la loc piesa "+stiva[loc].dispare+"<br>";
+	//trebuie sa vad unde este piesa indice
+	var ok=1;
+	for(ii=0;(ii<7)&&(ok==1);ii++)
+	for(jj=0;(jj<7)&&(ok==1);jj++)
+	   if(matr[ii][jj]==stiva[loc].piesa)ok=0;
+	ii--;jj--;
+	muta_gr(stiva[loc].piesa,x,stiva[loc].dispare);
+	muta(stiva[loc].piesa,x);
+	switch(x){
+	     case 1:{//trebuie sa te intorci sus cu doua
+		     //deci sus cu una e piesa disparuta
+		     matr[ii-1][jj]=stiva[loc].dispare;
+		     break;
+		     }
+	    case 2:{ matr[ii][jj-1]=stiva[loc].dispare;
+		     break;
+		     }
+	    case 3:{ matr[ii+1][jj]=stiva[loc].dispare;
+		     break;
+		     }
+	    case 4:{ matr[ii][jj+1]=stiva[loc].dispare;
+		     break;
+		     }
+	  }
+	  //notez faptul ca piesa revine pe tabla
+	  piesa[stiva[loc].dispare].starea=1;
+
+      }
+       document.getElementById('test').scrollTop=document.getElementById('test').scrollHeight;//-document.getElementById('test').clientHeight; 
+   return;
+   }
+}
+
+function init(){
+  //initializez matricea...si tabelul
+ var i,j;
+ for(i=0;i<7;i++)
+  for(j=0;j<7;j++)
+    matr[i][j]=0;
+ 
+  matr[1][3]=1;document.getElementById("patrat13").innerHTML="<img src=\"piesa1.gif\">";
+  matr[2][2]=2;document.getElementById("patrat22").innerHTML="<img src=\"piesa2.gif\">";
+  matr[2][3]=3;document.getElementById("patrat23").innerHTML="<img src=\"piesa3.gif\">";
+  matr[2][4]=4;document.getElementById("patrat24").innerHTML="<img src=\"piesa4.gif\">";
+  matr[3][3]=5;document.getElementById("patrat33").innerHTML="<img src=\"piesa5.gif\">";
+  matr[4][3]=6;document.getElementById("patrat43").innerHTML="<img src=\"piesa6.gif\">";
+  
+  for(i=0;i<100;i++){
+     stiva[i]=new Object();
+     piesa[i]=new Object();
+  }
+
+   for(i=0;i<6;i++){
+      stiva[i].piesa=1;
+      stiva[i].directia=stiva[i].dispare=0;
+      piesa[i].starea=1;
+   }
+
+interval=setInterval("interv()",1500);
+
+}
+
+</script>
+</head>
+<body onload="init();" bgcolor="#D4E7B2">
+
+<center><img src="sigla_pegged.gif"></center>
+<br><br><br><br><br><br>
+
+<div id="layout">
+	<div id="tabla">
+	<table bgcolor="#BBBBEE" border="1px">
+	<tr>
+	<td><div id="patrat00" class="patrat"></div></td>
+	<td><div id="patrat01" class="patrat"></div></td>
+	<td><div id="patrat02" class="patrat"></div></td>
+	<td><div id="patrat03" class="patrat"></div></td>
+	<td><div id="patrat04" class="patrat"></div></td>
+	<td><div id="patrat05" class="patrat"></div></td>
+	<td><div id="patrat06" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat10" class="patrat"></div></td>
+	<td><div id="patrat11" class="patrat"></div></td>
+	<td><div id="patrat12" class="patrat"></div></td>
+	<td><div id="patrat13" class="patrat"></div></td>
+	<td><div id="patrat14" class="patrat"></div></td>
+	<td><div id="patrat15" class="patrat"></div></td>
+	<td><div id="patrat16" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat20" class="patrat"></div></td>
+	<td><div id="patrat21" class="patrat"></div></td>
+	<td><div id="patrat22" class="patrat"></div></td>
+	<td><div id="patrat23" class="patrat"></div></td>
+	<td><div id="patrat24" class="patrat"></div></td>
+	<td><div id="patrat25" class="patrat"></div></td>
+	<td><div id="patrat26" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat30" class="patrat"></div></td>
+	<td><div id="patrat31" class="patrat"></div></td>
+	<td><div id="patrat32" class="patrat"></div></td>
+	<td><div id="patrat33" class="patrat"></div></td>
+	<td><div id="patrat34" class="patrat"></div></td>
+	<td><div id="patrat35" class="patrat"></div></td>
+	<td><div id="patrat36" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat40" class="patrat"></div></td>
+	<td><div id="patrat41" class="patrat"></div></td>
+	<td><div id="patrat42" class="patrat"></div></td>
+	<td><div id="patrat43" class="patrat"></div></td>
+	<td><div id="patrat44" class="patrat"></div></td>
+	<td><div id="patrat45" class="patrat"></div></td>
+	<td><div id="patrat46" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat50" class="patrat"></div></td>
+	<td><div id="patrat51" class="patrat"></div></td>
+	<td><div id="patrat52" class="patrat"></div></td>
+	<td><div id="patrat53" class="patrat"></div></td>
+	<td><div id="patrat54" class="patrat"></div></td>
+	<td><div id="patrat55" class="patrat"></div></td>
+	<td><div id="patrat56" class="patrat"></div></td>
+	</tr>
+	
+	<tr>
+	<td><div id="patrat60" class="patrat"></div></td>
+	<td><div id="patrat61" class="patrat"></div></td>
+	<td><div id="patrat62" class="patrat"></div></td>
+	<td><div id="patrat63" class="patrat"></div></td>
+	<td><div id="patrat64" class="patrat"></div></td>
+	<td><div id="patrat65" class="patrat"></div></td>
+	<td><div id="patrat66" class="patrat"></div></td>
+	</tr>
+	</table>
+	</div>
+
+
+	<div id="test">
+	Explicatii<br>
+	</div>
+</div>
+
+<!--STIVA GRAFICA-->
+<div id="stiva">
+   <div class="loc" id="loc0">
+     <div class="camp" id="piesa0"></div>
+     <div class="camp" id="directia0"></div>
+     <div class="camp" id="disparuta0"></div>
+   </div>
+   <div class="loc" id="loc1">
+     <div class="camp" id="piesa1"></div>
+     <div class="camp" id="directia1"></div>
+     <div class="camp" id="disparuta1"></div>
+   </div>
+   <div class="loc" id="loc2">
+     <div class="camp" id="piesa2"></div>
+     <div class="camp" id="directia2"></div>
+     <div class="camp" id="disparuta2"></div>
+   </div>
+   <div class="loc" id="loc3">
+     <div class="camp" id="piesa3"></div>
+     <div class="camp" id="directia3"></div>
+     <div class="camp" id="disparuta3"></div>
+   </div>
+   <div class="loc" id="loc4">
+     <div class="camp" id="piesa4"></div>
+     <div class="camp" id="directia4"></div>
+     <div class="camp" id="disparuta4"></div>
+   </div>
+</div>
+
+
+
+</body>
+</html>

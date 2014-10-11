@@ -1,0 +1,2 @@
+"Furnicutze" is a game I implemented based on a real puzzle; You cannot try to solve it, it is not interactive, but it represents a combination bettween javascript, games and programming techniques (backtracking). The upper array represents the array of cards (the cards with green border are still available to be used; the other ones are red-borded and cannot be used, they are already on the board). 
+The lower array represents the backtracking stack.

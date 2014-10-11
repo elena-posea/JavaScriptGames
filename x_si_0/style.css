@@ -1,0 +1,17 @@
+.patrat{
+   width: 30px;
+   height: 30px;
+   text-align: center;
+   color:#FF0000;
+   background-color:#555555;
+   float:left;
+}
+
+body{
+  	font: normal normal normal 11px/normal Comic sans MS,Trebuchet MS, arial, verdana, sans-serif;
+	color: #052D33;
+	line-height: 22px;
+    font-size: 20px;
+  	font-weight: normal;
+}
+

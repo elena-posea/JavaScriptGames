@@ -1,0 +1,287 @@
+<html>
+<head>
+<style>
+  .areaOutline
+  {
+    clear: both;
+    overflow: hidden;
+    position:absolute;
+	width:3px;
+	height:3px;
+	z-index: 99; /* vreau sa fie chiar dedesubtul lui backgroundPromp; nimic intre ele */
+  }
+  body{
+    margin: 0px;
+	padding: 0px;
+    /* ca userul sa nu poata selecta nimic
+    */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: "Times New Roman";
+    background-color: black;
+    padding: 0px;
+    margin: 0px;
+  }
+    #verticalPanel{
+     float: right;
+     border: 1px solid red;
+     width: 470px;
+   }
+   #gameStatus{
+     border: 1px solid #DDDDDD;
+     height: 30px;
+     width: 100%;
+     text-align: center;
+     background-color: #EEEEEE;
+     padding: 2px;
+     font: bold 25px "Times New Roman";
+     color: red;
+   }
+
+   #turnStatus{  
+     width: 100%;
+     height: 434px;
+     background-color: #DDDDDD;
+     padding: 10px;
+     font: normal 18px "Times New Roman"; 
+   }
+
+   #promptBackground{
+      background-image: url('square.png');
+      background-repeat: repeat;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      /*Pentru Ie, care nu stie sa alinieze div-uri in centru..*/
+	  text-align: center;
+	  
+      top: 0px;
+      left: 0px;
+      z-index: 100; /*sa fiu sigura ca e cel mai sus*/
+    }
+    #utilizator{
+      background-color: #FFFFFF;
+      width: 300px;
+      height: 300px;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+      padding: 10px;
+    }
+
+    #cuCateZaruriDaFiecare{
+      text-align: left; /*sa resetez ce am pus in promptBackground*/
+      background-color: #DDDDDD;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+      display: none;
+      height: 400px;
+      width: 200px;
+      border-width: 3px;
+      border-style: solid;
+      font-size: 15px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    #zaruri{
+      text-align: left; /*sa resetez ce am pus in promptBackground*/
+      background-color: #DDDDDD;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 100px;
+      display: none;
+      height: 400px;
+      width: 200px;
+      border-width: 3px;
+      border-style: solid;
+      font-size: 15px;
+      padding-left: 10px;
+    }
+
+
+    .promptJucator{
+      text-align: left; /*sa resetez ce am pus in promptBackground*/
+      background-color: #DDDDDD;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      display: none;
+      height: 150px;
+      width: 150px;
+      border-width: 3px;
+      border-style: solid;
+      font-size: 15px;
+      padding-left: 10px;
+    }
+
+    img{
+      margin: 0px;
+    }
+
+    .numar{
+      /*pointer-events: none;*/
+      /*pe IE si Opera nu merge, asa ca am pus de mana aceeasi actiune pe fiecare div class numar...*/
+      background-image: url('alphaSquare.png');
+      background-repeat: repeat;
+      cursor: default;
+      width: 25px;
+      height: 15px;
+      border: 2px solid black;
+      position: absolute;
+      margin: 0px;
+      padding: 0px;
+      text-align: center;
+      font: bold "Times New Roman" 15px;
+      line-height: 15px;
+    }
+    #PASS{
+      display: none;
+      cursor: hand;
+      cursor: pointer;
+    }
+  </style>
+<script type="text/javascript" src="poly.js"></script>
+<script type="text/javascript" src="gameAlgorithm.js"></script>
+
+</head>
+<body onload="configurareJucatori()">
+
+
+<img src="riskBoard.jpg" alt="tablaDeJoc" usemap="#riskMap" style="float:left;">
+
+<div id="verticalPanel">
+<img src="riskLogo.jpg" alt="riskLogo" style="position: relative; margin-left: auto; margin-right: auto; margin-bottom: 20px; margin-top: 10px; display: block;">
+<div id="gameStatus">  
+   Risk: strategy game
+</div>
+<div id="turnStatus">
+</div>
+</div>
+
+<!--
+   DIV-URILE PENTRU NUMARUL DE ARMATE DIN FIECARE CELULA
+-->
+ <div id="numar1" class="numar" style="left: 42px; top: 115px;" onclick="apasatTara(1);"></div>
+ <div id="numar2" class="numar" style="left: 113px; top: 122px;" onclick="apasatTara(2);"></div>
+ <div id="numar3" class="numar" style="left: 116px; top: 164px;" onclick="apasatTara(3);"></div>
+ <div id="numar4" class="numar" style="left: 169px; top: 173px;" onclick="apasatTara(4);"></div>
+ <div id="numar5" class="numar" style="left: 270px; top: 100px;" onclick="apasatTara(5);"></div>
+ <div id="numar6" class="numar" style="left: 222px; top: 174px;" onclick="apasatTara(6);"></div>
+ <div id="numar7" class="numar" style="left: 120px; top: 218px;" onclick="apasatTara(7);"></div>
+ <div id="numar8" class="numar" style="left: 182px; top: 234px;" onclick="apasatTara(8);"></div>
+ <div id="numar9" class="numar" style="left: 144px; top: 294px;" onclick="apasatTara(9);"></div>
+ <div id="numar10" class="numar" style="left: 178px; top: 332px;" onclick="apasatTara(10);"></div>
+ <div id="numar11" class="numar" style="left: 220px; top: 358px;" onclick="apasatTara(11);"></div>
+ <div id="numar12" class="numar" style="left: 177px; top: 384px;" onclick="apasatTara(12);"></div>
+ <div id="numar13" class="numar" style="left: 206px; top: 430px;" onclick="apasatTara(13);"></div>
+ <div id="numar14" class="numar" style="left: 329px; top: 205px;" onclick="apasatTara(14);"></div>
+ <div id="numar15" class="numar" style="left: 402px; top: 140px;" onclick="apasatTara(15);"></div>
+ <div id="numar16" class="numar" style="left: 346px; top: 148px;" onclick="apasatTara(16);"></div>
+ <div id="numar17" class="numar" style="left: 354px; top: 253px;" onclick="apasatTara(17);"></div>
+ <div id="numar18" class="numar" style="left: 362px; top: 328px;" onclick="apasatTara(18);"></div>
+ <div id="numar19" class="numar" style="left: 431px; top: 406px;" onclick="apasatTara(19);"></div>
+ <div id="numar20" class="numar" style="left: 435px; top: 498px;" onclick="apasatTara(20);"></div>
+ <div id="numar21" class="numar" style="left: 405px; top: 200px;" onclick="apasatTara(21);"></div>
+ <div id="numar22" class="numar" style="left: 419px; top: 274px;" onclick="apasatTara(22);"></div>
+ <div id="numar23" class="numar" style="left: 476px; top: 184px;" onclick="apasatTara(23);"></div>
+ <div id="numar24" class="numar" style="left: 426px; top: 330px;" onclick="apasatTara(24);"></div>
+ <div id="numar25" class="numar" style="left: 484px; top: 400px;" onclick="apasatTara(25);"></div>
+ <div id="numar26" class="numar" style="left: 496px; top: 332px;" onclick="apasatTara(26);"></div>
+ <div id="numar27" class="numar" style="left: 539px; top: 247px;" onclick="apasatTara(27);"></div>
+ <div id="numar28" class="numar" style="left: 560px; top: 182px;" onclick="apasatTara(28);"></div>
+ <div id="numar29" class="numar" style="left: 596px; top: 118px;" onclick="apasatTara(29);"></div>
+ <div id="numar30" class="numar" style="left: 654px; top: 114px;" onclick="apasatTara(30);"></div>
+ <div id="numar31" class="numar" style="left: 654px; top: 150px;" onclick="apasatTara(31);"></div>
+ <div id="numar32" class="numar" style="left: 678px; top: 194px;" onclick="apasatTara(32);"></div>
+ <div id="numar33" class="numar" style="left: 605px; top: 236px;" onclick="apasatTara(33);"></div>
+ <div id="numar34" class="numar" style="left: 574px; top: 283px;" onclick="apasatTara(34);"></div>
+ <div id="numar35" class="numar" style="left: 646px; top: 304px;" onclick="apasatTara(35);"></div>
+ <div id="numar36" class="numar" style="left: 724px; top: 113px;" onclick="apasatTara(36);"></div>
+ <div id="numar37" class="numar" style="left: 750px; top: 200px;" onclick="apasatTara(37);"></div>
+ <div id="numar38" class="numar" style="left: 648px; top: 385px;" onclick="apasatTara(38);"></div>
+ <div id="numar39" class="numar" style="left: 719px; top: 368px;" onclick="apasatTara(39);"></div>
+ <div id="numar40" class="numar" style="left: 753px; top: 460px;" onclick="apasatTara(40);"></div>
+ <div id="numar41" class="numar" style="left: 684px; top: 433px;" onclick="apasatTara(41);"></div>
+ <div id="numar42" class="numar" style="left: 510px; top: 486px;" onclick="apasatTara(42);"></div>
+
+
+<div id="promptBackground">
+  <div id="utilizator">
+    <!--
+      Aici sunt butoanele prev si next pentru userSetup...
+    -->
+    <div style="height:30px; width: 100%;border: 1px solid black; margin-top: 7px; margin-bottom: 25px;">  
+       <img src="prev.png" alt="prev" style= "cursor: hand; cursor: pointer; float: left;" onclick="prev()">
+       <img src="next.png" alt="next" style="cursor: hand; cursor: pointer; float: right;" onclick="next()">
+    </div>
+    <div id="zonaGenerata" style="margin-bottom: 15px;">
+      <!--
+          aici fac mai multe div-uri cu clasa promptJucator; vor fi suprapuse, doar unul vizibil;
+          le generez dinamic, de dragul generalitatii
+      -->
+    </div>
+    <input type="button" onclick="amTerminatConfigurarea()" value="We are all ready!!">
+  </div>
+</div>
+
+<div id="player1" style="font-size: 18px; font-weight: bold; text-align: center; border: 2px solid black; position: absolute; left: 43px; top: 563px; width: 180px; height: 20px;"></div>
+<div id="player2" style="font-size: 18px; font-weight: bold; text-align: center; border: 2px solid black; position: absolute; left: 580px; top: 563px; width: 180px; height: 20px;"></div>
+<div id="game" style="font-size: 18px; font-weight: bold; text-align: center; border: 2px solid black; position: absolute; left: 283px; top: 563px; width: 235px; height: 25px;"></div>
+<div id="infoJoc" style="padding: 0px; font-size: 14px; font-weight: bold; text-align: center; border: 2px solid black; position: absolute; left: 91px; top: 536px; width: 630px; height: 13px;"></div>
+<div id="PASS" style="position: absolute; left:342; top:62; width: 176px; height: 28px; text-align: center;">PASS </div> 
+
+<map name="riskMap">
+<area shape='poly' coords='21, 123, 26, 114, 34, 118, 29, 106, 53, 99, 78, 108, 76, 142, 84, 144, 89, 159, 96, 163, 88, 174, 75, 152, 52, 144, 26, 164, 20, 161, 30, 152, 15, 138, 20, 131, 28, 131, 32, 127' alt='tara1' onclick="apasatTara(1);">
+<area shape='poly' coords='76, 142, 78, 108, 113, 105, 143, 117, 181, 111, 187, 91, 197, 87, 189, 106, 199, 115, 205, 112, 208, 123, 199, 125, 178, 146, 156, 146, 84, 144' alt='tara2' onclick="apasatTara(2);">
+<area shape='poly' coords='100, 196, 88, 174, 96, 163, 84, 144, 156, 146, 152, 196' alt='tara3' onclick="apasatTara(3);">
+<area shape='poly' coords='156, 146, 152, 196, 170, 198, 178, 198, 199, 219, 214, 214, 206, 210, 206, 187, 202, 175, 174, 158, 174, 152, 178, 146' alt='tara4' onclick="apasatTara(4);">
+<area shape='poly' coords='276, 162, 283, 138, 304, 128, 324, 100, 321, 85, 326, 70, 308, 73, 312, 64, 282, 59, 268, 71, 250, 75, 232, 84, 224, 100, 247, 104, 256, 119, 254, 134, 265, 156' alt='tara5' onclick="apasatTara(5);">
+<area shape='poly' coords='266, 186, 246, 153, 242, 160, 236, 158, 236, 149, 221, 142, 215, 165, 209, 172, 206, 187, 206, 210, 213, 207, 214, 214, 228, 210, 235, 205, 240, 216, 238, 222, 242, 224, 252, 212, 245, 210, 244, 199, 232, 200, 242, 194' alt='tara6' onclick="apasatTara(6);">
+<area shape='poly' coords='170, 198, 170, 228, 149, 244, 144, 266, 104, 256, 94, 231, 100, 196, 152, 196' alt='tara7' onclick="apasatTara(7);">
+<area shape='poly' coords='235, 205, 214, 214, 199, 219, 178, 198, 170, 198, 170, 228, 149, 244, 144, 266, 150, 272, 162, 265, 192, 264, 197, 281, 203, 280, 202, 264, 220, 249, 216, 240, 230, 224, 240, 216' alt='tara8' onclick="apasatTara(8);">
+<area shape='poly' coords='150, 272, 144, 266, 104, 256, 121, 293, 157, 326, 167, 306, 162, 303, 169, 290, 164, 287, 150, 294, 144, 286' alt='tara9' onclick="apasatTara(9);">
+<area shape='poly' coords='157, 326, 168, 333, 165, 348, 188, 361, 196, 360, 196, 351, 201, 347, 208, 351, 213, 343, 225, 339, 229, 349, 242, 347, 250, 346, 256, 338, 238, 332, 222, 319, 195, 316, 171, 324' alt='tara10' onclick="apasatTara(10);">
+<area shape='poly' coords='255, 450, 266, 435, 269, 425, 286, 416, 295, 404, 297, 387, 310, 375, 306, 366, 272, 352, 259, 353, 261, 338, 256, 338, 250, 346, 242, 347, 229, 349, 225, 339, 213, 343, 208, 351, 201, 347, 196, 351, 196, 360, 188, 361, 178, 372, 196, 387, 209, 380, 236, 398, 250, 428, 244, 438' alt='tara11' onclick="apasatTara(11);">
+<area shape='poly' coords='188, 361, 178, 372, 196, 387, 209, 380, 236, 398, 250, 428, 237, 432, 239, 426, 210, 416, 198, 406, 194, 408, 176, 397, 160, 372, 165, 348' alt='tara12' onclick="apasatTara(12);">
+<area shape='poly' coords='238, 526, 220, 518, 220, 492, 232, 469, 242, 464, 238, 454, 252, 456, 255, 450, 244, 438, 250, 428, 237, 432, 239, 426, 210, 416, 198, 406, 194, 408, 194, 506, 209, 523' alt='tara13' onclick="apasatTara(13);">
+<area shape='poly' coords='330, 174, 321, 185, 330, 201, 320, 202, 314, 206, 316, 212, 307, 211, 305, 226, 311, 234, 327, 226, 338, 230, 326, 240, 356, 236, 362, 222, 348, 198, 336, 198, 346, 184, 340, 176' alt='tara14' onclick="apasatTara(14);">
+<area shape='poly' coords='380, 160, 384, 152, 390, 150, 412, 128, 409, 122, 437, 111, 453, 116, 449, 138, 453, 154, 450, 164, 430, 165, 434, 148, 429, 146, 421, 160, 425, 166, 414, 189, 405, 188, 397, 176, 392, 181, 385, 177' alt='tara15' onclick="apasatTara(15);">
+<area shape='poly' coords='326, 154, 333, 142, 345, 147, 360, 139, 372, 149, 372, 156, 350, 168, 333, 163, 336, 160' alt='tara16' onclick="apasatTara(16);">
+<area shape='poly' coords='373, 234, 351, 248, 338, 249, 350, 264, 347, 273, 330, 270, 323, 277, 328, 285, 323, 302, 350, 314, 356, 314, 357, 308, 369, 298, 367, 283, 387, 275, 376, 275, 383, 267, 384, 251' alt='tara17' onclick="apasatTara(17);">
+<area shape='poly' coords='350, 314, 334, 348, 338, 364, 331, 374, 359, 408, 393, 402, 406, 416, 425, 416, 422, 403, 444, 389, 444, 364, 406, 347, 403, 336, 413, 320, 400, 306, 392, 304, 356, 314' alt='tara18' onclick="apasatTara(18);">
+<area shape='poly' coords='406, 416, 401, 427, 415, 436, 442, 453, 461, 460, 464, 445, 466, 426, 478, 415, 477, 411, 457, 409, 444, 389, 422, 403, 425, 416' alt='tara19' onclick="apasatTara(19);">
+<area shape='poly' coords='415, 436, 411, 476, 433, 528, 458, 524, 477, 492, 478, 481, 493, 468, 490, 452, 479, 458, 479, 469, 473, 468, 473, 455, 464, 445, 464, 445, 461, 460, 442, 453' alt='tara20' onclick="apasatTara(20);">
+<area shape='poly' coords='396, 185, 394, 204, 385, 207, 373, 234, 384, 251, 406, 248, 408, 243, 419, 243, 419, 253, 428, 253, 428, 245, 436, 237, 432, 232, 442, 228, 446, 217, 443, 201, 433, 196, 421, 194, 401, 197, 405, 188' alt='tara21' onclick="apasatTara(21);">
+<area shape='poly' coords='400, 306, 392, 304, 390, 295, 400, 299, 400, 287, 387, 275, 378, 282, 376, 275, 383, 267, 384, 251, 406, 248, 408, 243, 419, 243, 419, 253, 428, 253, 428, 245, 436, 237, 441, 235, 449, 259, 446, 273, 440, 287, 436, 306, 426, 305, 423, 291, 411, 272, 403, 273, 417, 289, 413, 291, 409, 288, 409, 292' alt='tara22' onclick="apasatTara(22);">
+<area shape='poly' coords='449, 259, 459, 252, 467, 262, 474, 257, 483, 248, 477, 257, 494, 278, 514, 275, 516, 260, 506, 249, 506, 240, 511, 236, 506, 223, 510, 208, 531, 203, 538, 205, 547, 196, 542, 160, 549, 118, 533, 113, 522, 118, 517, 114, 475, 142, 456, 128, 482, 128, 480, 120, 453, 116, 449, 138, 453, 154, 450, 164, 441, 183, 434, 178, 431, 189, 433, 196, 443, 201, 446, 217, 442, 228, 432, 232, 436, 237, 441, 235' alt='tara23' onclick="apasatTara(23);">
+<area shape='poly' coords='480, 354, 449, 357, 444, 364, 406, 347, 403, 336, 413, 320, 432, 321, 473, 326, 466, 333' alt='tara24' onclick="apasatTara(24);">
+<area shape='poly' coords='480, 354, 449, 357, 444, 364, 444, 389, 457, 409, 477, 411, 478, 415, 466, 426, 464, 445, 473, 455, 473, 468, 479, 469, 479, 458, 490, 452, 487, 438, 519, 403, 525, 389, 501, 390' alt='tara25' onclick="apasatTara(25);">
+<area shape='poly' coords='473, 326, 475, 302, 466, 305, 444, 302, 440, 287, 446, 273, 455, 278, 463, 274, 477, 275, 485, 280, 494, 278, 514, 275, 524, 279, 530, 276, 537, 273, 551, 282, 559, 318, 547, 327, 534, 327, 525, 312, 519, 317, 532, 335, 539, 333, 549, 337, 550, 351, 527, 377, 506, 380, 502, 365' alt='tara26' onclick="apasatTara(26);">
+<area shape='poly' coords='551, 282, 537, 273, 530, 276, 511, 236, 506, 223, 510, 208, 531, 203, 538, 205, 547, 196, 575, 221, 580, 217, 594, 229, 594, 244, 580, 258, 587, 266, 579, 274, 571, 269' alt='tara27' onclick="apasatTara(27);">
+<area shape='poly' coords='594, 229, 580, 217, 575, 221, 547, 196, 542, 160, 549, 118, 542, 108, 547, 91, 556, 100, 553, 107, 559, 113, 559, 124, 553, 129, 563, 125, 575, 127, 581, 146, 593, 158, 596, 172, 588, 184, 590, 189, 596, 186, 607, 206' alt='tara28' onclick="apasatTara(28);">
+<area shape='poly' coords='607, 206, 596, 186, 590, 189, 588, 184, 596, 172, 593, 158, 581, 146, 575, 127, 566, 95, 619, 64, 631, 71, 621, 84, 633, 77, 654, 82, 656, 106, 645, 106, 637, 114, 650, 142, 648, 165, 635, 163, 622, 174, 628, 194, 629, 217, 616, 201' alt='tara29' onclick="apasatTara(29);">
+<area shape='poly' coords='650, 142, 637, 114, 645, 106, 656, 106, 654, 82, 665, 76, 686, 84, 704, 77, 720, 86, 708, 99, 714, 110, 710, 112, 694, 114, 682, 134' alt='tara30' onclick="apasatTara(30);">
+<area shape='poly' coords='650, 142, 682, 134, 681, 154, 694, 169, 700, 165, 710, 175, 706, 194, 691, 177, 678, 178, 676, 193, 628, 194, 622, 174, 635, 163, 648, 165' alt='tara31' onclick="apasatTara(31);">
+<area shape='poly' coords='629, 217, 628, 194, 676, 193, 678, 178, 691, 177, 706, 194, 718, 210, 711, 220, 723, 234, 715, 244, 699, 225, 692, 233, 704, 238, 698, 245, 648, 240' alt='tara32' onclick="apasatTara(32);">
+<area shape='poly' coords='698, 245, 648, 240, 629, 217, 616, 201, 607, 206, 594, 229, 594, 244, 580, 258, 587, 266, 598, 271, 601, 283, 614, 279, 642, 291, 660, 302, 670, 296, 679, 301, 683, 305, 707, 279, 709, 261' alt='tara33' onclick="apasatTara(33);">
+<area shape='poly' coords='642, 291, 614, 279, 601, 283, 598, 271, 587, 266, 579, 274, 571, 269, 551, 282, 559, 318, 578, 335, 583, 331, 582, 350, 601, 387, 608, 366, 618, 315, 629, 307' alt='tara34' onclick="apasatTara(34);">
+<area shape='poly' coords='629, 307, 642, 291, 660, 302, 670, 296, 679, 301, 671, 308, 684, 321, 688, 332, 680, 350, 662, 336, 670, 356, 666, 359, 654, 341, 656, 336, 648, 325, 645, 328' alt='tara35' onclick="apasatTara(35);">
+<area shape='poly' coords='706, 194, 718, 210, 725, 195, 723, 160, 704, 154, 711, 138, 739, 137, 752, 122, 742, 149, 742, 149, 744, 158, 752, 169, 759, 168, 760, 146, 754, 138, 763, 131, 769, 132, 783, 117, 776, 112, 780, 106, 795, 115, 798, 103, 764, 85, 752, 88, 754, 92, 720, 86, 708, 99, 714, 110, 710, 112, 694, 114, 682, 134, 681, 154, 694, 169, 700, 165, 710, 175' alt='tara36' onclick="apasatTara(36);">
+<area shape='poly' coords='744, 243, 769, 224, 764, 218, 766, 208, 762, 200, 755, 196, 753, 191, 765, 189, 773, 180, 768, 176, 757, 177, 752, 175, 748, 177, 753, 183, 748, 190, 752, 197, 748, 204, 753, 213, 738, 220, 726, 242, 738, 237, 737, 243' alt='tara37' onclick="apasatTara(37);">
+<area shape='poly' coords='610, 379, 613, 375, 637, 389, 653, 382, 667, 363, 675, 370, 671, 378, 677, 387, 692, 385, 689, 396, 680, 400, 686, 411, 672, 413, 670, 398, 662, 406, 645, 402, 650, 412, 643, 420' alt='tara38' onclick="apasatTara(38);">
+<area shape='poly' coords='757, 396, 745, 370, 716, 360, 708, 363, 696, 357, 693, 362, 702, 373, 714, 379, 712, 388, 735, 394, 738, 390' alt='tara39' onclick="apasatTara(39);">
+<area shape='poly' coords='738, 501, 766, 497, 787, 451, 765, 433, 751, 405, 745, 424, 731, 420, 736, 410, 717, 409, 709, 421, 709, 454, 741, 454' alt='tara40' onclick="apasatTara(40);">
+<area shape='poly' coords='738, 501, 741, 454, 709, 454, 709, 421, 690, 424, 656, 443, 653, 460, 658, 465, 657, 487, 665, 493, 692, 484, 717, 476' alt='tara41' onclick="apasatTara(41);">
+<area shape='poly' coords='532, 454, 535, 468, 530, 476, 521, 501, 513, 511, 500, 512, 497, 500, 505, 477, 516, 470' alt='tara42' onclick="apasatTara(42);">
+</map>
+
+</body>
+</html>
